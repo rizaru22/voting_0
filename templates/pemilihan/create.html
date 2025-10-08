@@ -1,0 +1,59 @@
+{% extends 'base_admin.html' %} {% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Tambah Pemilihan</h3>
+  <div class="row">
+  <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+          <div class="card p-4">
+    <form action="{{url_for('tambah_pemilihan')}}" method="POST">
+      <div class="mb-3">
+        <label for="nama_pemilihan" class="form-label">Nama Pemilihan</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nama_pemilihan"
+          name="nama_pemilihan"
+          placeholder="Masukkan nama pemilihan"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+        <input
+          type="date"
+          class="form-control"
+          id="tanggal_mulai"
+          name="tanggal_mulai"
+          placeholder="Masukkan nama pemilihan"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+        <input
+          type="date"
+          class="form-control"
+          id="tanggal_selesai"
+          name="tanggal_selesai"
+          placeholder="Masukkan nama pemilihan"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-control" name="status" id="status">
+            <option value="T">Aktif</option>
+            <option value="F">Non Aktif</option>
+        </select>
+      </div>
+<div class="text-end">
+          <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-save me-2"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+          
+  </div>
+    </div>
+  </div>
+
+  {% endblock %}

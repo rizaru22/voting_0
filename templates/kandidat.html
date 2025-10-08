@@ -1,0 +1,35 @@
+{% extends "base_admin.html" %} {% block content %}
+
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Kelola Data Kandidat</h3>
+  <button class="btn btn-success mb-4 rounded-pill px-4">
+    + Tambah Kandidat
+  </button>
+
+  <div class="card p-4">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-primary">
+        <tr>
+          <th>No</th>
+          <th>Nama Kandidat</th>
+          <th>Visi</th>
+          <th>Misi</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Amanda Putri</td>
+          <td>Menjadikan OSIS lebih aktif dan kreatif</td>
+          <td>Meningkatkan kegiatan ekstrakurikuler</td>
+          <td>
+            <button class="btn btn-warning btn-sm rounded-pill">Edit</button>
+            <button class="btn btn-danger btn-sm rounded-pill">Hapus</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
