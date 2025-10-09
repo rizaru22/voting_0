@@ -1,0 +1,44 @@
+{% extends "base_admin.html" %} {% block content %}
+
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Daftar Pemilih</h3>
+  <a href="{{url_for('tambah_voter')}}" class="btn btn-success mb-4 rounded-pill px-4">
+    + Tambah Pemilih
+  </a>
+
+  <div class="card p-4">
+    <table class="table table-hover align-middle mb-0" id="votersTable">
+      <thead class="table-primary">
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Kelas</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in data %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{item.nama}}</td>
+          <td>{{item.kode_kelas}}</td>
+          <td>
+              <form action="{{url_for('hapus_voter',id=item.id_voter)}}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?');" class="d-inline">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <a href="{{url_for('edit_voter',id=item.id_voter)}}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+                  <button type="submit" class="btn btn-danger btn-sm "><i class="bi bi-trash me-2"></i>Hapus</button>
+                </div>
+              </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    let table = new DataTable('#votersTable');
+    </script>
+{% endblock %}

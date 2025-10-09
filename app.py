@@ -191,5 +191,60 @@ def edit_kelas(id):
     
     return render_template('kelas/edit.html',data=kelas)
 
+@app.route('/voters')
+def voters():
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM voters JOIN kelas ON voters.id_kelas = kelas.id_kelas ORDER BY kelas.kode_kelas ')
+    voters= cursor.fetchall()
+    cursor.close()
+    return render_template('voters/index.html', data=voters)
+
+@app.route('/tambah_voter',methods=['GET','POST'])
+def tambah_voter():
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM kelas')
+    kelas= cursor.fetchall()
+    cursor.close()
+    
+    if request.method=='POST':
+        nama=request.form['nama']
+        id_kelas=request.form['kelas']
+        
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO voters (nama, id_kelas) VALUES (%s,%s)', (nama, id_kelas))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('voters'))
+    
+    return render_template('voters/create.html', kelas=kelas)
+
+@app.route('/edit_voter/<int:id>',methods=['GET','POST'])
+def edit_voter(id):
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM kelas')
+    kelas= cursor.fetchall()
+    
+    cursor.execute('SELECT * FROM voters WHERE id_voter=%s',[id])
+    voter=cursor.fetchone()
+    
+    if request.method=='POST':
+        nama=request.form['nama']
+        id_kelas=request.form['kelas']
+        
+        cursor.execute('UPDATE voters SET nama=%s, id_kelas=%s WHERE id_voter=%s', (nama, id_kelas, id))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('voters'))
+    
+    return render_template('voters/edit.html',data=voter, kelas=kelas)
+
+@app.route('/hapus_voter/<int:id>',methods=['POST'])
+def hapus_voter(id):
+    cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM voters WHERE id_voter=%s',[id])
+    mysql.connection.commit()
+    cursor.close()
+    return redirect(url_for('voters'))
+
 if __name__ == '__main__':
     app.run(debug=True)

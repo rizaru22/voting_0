@@ -1,0 +1,38 @@
+{% extends 'base_admin.html' %} {% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Tambah Pemilih</h3>
+  <div class="row">
+  <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+          <div class="card p-4">
+    <form action="{{url_for('edit_voter',id=data.id_voter)}}" method="POST">
+      <div class="mb-3">
+        <label for="nama_pemilih" class="form-label">Nama:</label>
+        <input
+          type="text"
+          class="form-control "
+          id="nama"
+          name="nama"
+          value="{{data.nama}}"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="nama_pemilih" class="form-label">Kelas:</label>
+        <select class="form-select" aria-label="Default select example" name="kelas" id="kelas" required>
+          <option selected disabled value="">Pilih Kelas</option>
+          {% for item in kelas %}
+          <option value="{{item.id_kelas}}" {% if data.id_kelas==item.id_kelas %} selected {% endif %}>{{item.kode_kelas}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+<div class="text-end">
+          <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-save me-2"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+
+    </div>
+  </div>
+
+  {% endblock %}
