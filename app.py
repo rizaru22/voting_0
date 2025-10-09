@@ -2,11 +2,20 @@ from flask import Flask, render_template,request,redirect,url_for   ,session
 from flask_mysqldb import MySQL,MySQLdb
 from secrets import token_hex
 import bcrypt
+import os
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 app.secret_key = token_hex(16)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 mysql = MySQL(app)
@@ -245,6 +254,84 @@ def hapus_voter(id):
     mysql.connection.commit()
     cursor.close()
     return redirect(url_for('voters'))
+
+
+@app.route('/kandidat')
+def kandidat(): 
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM candidates JOIN pemilihan ON candidates.id_pemilihan = pemilihan.id_pemilihan WHERE pemilihan.status="T" ')
+    kandidat= cursor.fetchall()
+    cursor.close()
+    return render_template('kandidat/index.html', data=kandidat)
+
+
+
+@app.route('/tambah_kandidat',methods=['GET','POST'])
+def tambah_kandidat():
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM pemilihan WHERE status="T" ')
+    pemilihan= cursor.fetchall()
+    cursor.close()
+    
+    if request.method=='POST':
+        nama=request.form['nama']
+        foto=request.files['foto']
+        visi=request.form['visi']
+        misi=request.form['misi']
+        id_pemilihan=request.form['pemilihan']
+        
+        if foto and allowed_file(foto.filename):
+            filename =f"{uuid4().hex}_{secure_filename(foto.filename)}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            foto.save(filepath)
+            
+
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO candidates (nama, foto,visi,misi, id_pemilihan) VALUES (%s,%s,%s,%s,%s)', (nama, filename,visi,misi, id_pemilihan))
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('kandidat'))
+    
+    return render_template('kandidat/create.html', pemilihan=pemilihan)
+
+@app.route('/delete_kandidat/<int:id>',methods=['POST'])
+def hapus_kandidat(id):
+    if request.method=='POST':
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM candidates WHERE id_candidate=%s',[id])
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('kandidat'))
+    
+@app.route('/edit_kandidat/<int:id>',methods=['GET','POST'])
+def edit_kandidat(id):
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM pemilihan WHERE status="T" ')
+    pemilihan= cursor.fetchall()
+    
+    cursor.execute('SELECT * FROM candidates WHERE id_candidate=%s',[id])
+    kandidat=cursor.fetchone()
+    
+    if request.method=='POST':
+        nama=request.form['nama']
+        foto=request.files['foto']
+        visi=request.form['visi']
+        misi=request.form['misi']
+        id_pemilihan=request.form['pemilihan']
+        
+        if foto and allowed_file(foto.filename):
+            filename =f"{uuid4().hex}_{secure_filename(foto.filename)}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            foto.save(filepath)
+            cursor.execute('UPDATE candidates SET nama=%s, foto=%s, visi=%s, misi=%s, id_pemilihan=%s WHERE id_candidate=%s', (nama, filename,visi,misi, id_pemilihan, id))
+        else:
+            cursor.execute('UPDATE candidates SET nama=%s, visi=%s, misi=%s, id_pemilihan=%s WHERE id_candidate=%s', (nama,visi,misi, id_pemilihan, id))
+            
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('kandidat'))
+    
+    return render_template('kandidat/edit.html',data=kandidat, pemilihan=pemilihan)
 
 if __name__ == '__main__':
     app.run(debug=True)

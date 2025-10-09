@@ -1,0 +1,44 @@
+{% extends "base_admin.html" %} {% block content %}
+
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Daftar Kandidat</h3>
+  <a href="{{url_for('tambah_kandidat')}}" class="btn btn-success mb-4 rounded-pill px-4">
+    + Tambah Kandidat
+  </a>
+
+  <div class="card p-4">
+    <table class="table table-hover align-middle mb-0" id="candidateTable">
+      <thead class="table-primary">
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Foto</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in data %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{item.nama}}</td>
+          <td><img src="{{url_for('static',filename='uploads/'+item.foto)}}" alt="{{item.nama}}" style="width: 6vw; height: 8vh;"></td>
+          <td>
+              <form action="{{url_for('hapus_kandidat',id=item.id_candidate)}}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?');" class="d-inline">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <a href="{{url_for('edit_kandidat',id=item.id_candidate)}}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+                  <button type="submit" class="btn btn-danger btn-sm "><i class="bi bi-trash me-2"></i>Hapus</button>
+                </div>
+              </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    let table = new DataTable('#candidateTable');
+    </script>
+{% endblock %}

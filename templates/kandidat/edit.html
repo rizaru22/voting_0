@@ -1,0 +1,67 @@
+{% extends 'base_admin.html' %} {% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Tambah Kelas</h3>
+  <div class="row">
+  <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+          <div class="card p-4">
+    <form action="{{url_for('edit_kandidat',id=data.id_candidate)}}" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="nama" class="form-label">Nama</label>
+        <input
+          type="text"
+          class="form-control "
+          id="nama"
+          name="nama"
+          value="{{ data.nama }}"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="foto" class="form-label">Foto</label>
+        <input
+          type="file"
+          class="form-control "
+          id="foto"
+          name="foto"
+          placeholder="Masukkan Foto Kandidat"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="visi" class="form-label">Visi</label>
+        <textarea class="form-control "
+          id="visi"
+          name="visi"
+          placeholder="Visi"
+          required>{{data.visi}}</textarea>
+      </div>
+<div class="mb-3">
+        <label for="misi" class="form-label">Misi</label>
+        <textarea class="form-control "
+          id="misi"
+          name="misi"
+          placeholder="Misi"
+          required>{{data.misi}}</textarea>
+      </div>
+
+            <div class="mb-3">
+        <label for="pemilihan" class="form-label">Pemilihan:</label>
+        <select class="form-select" aria-label="Default select example" name="pemilihan" id="pemilihan" required>
+          <option selected disabled value="">Pilih </option>
+          {% for item in pemilihan %}
+          <option value="{{item.id_pemilihan}}" {% if data.id_pemilihan==item.id_pemilihan %} selected {% endif %}>{{item.nama_pemilihan}}</option>
+          {% endfor %}
+        </select>
+      </div>
+<div class="text-end">
+          <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-save me-2"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+          
+  </div>
+    </div>
+  </div>
+
+  {% endblock %}
