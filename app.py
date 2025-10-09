@@ -154,5 +154,42 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
+@app.route('/kelas')
+def kelas():
+    cursor= mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM kelas')
+    kelas= cursor.fetchall()
+    cursor.close()
+    return render_template('kelas/index.html', data=kelas)
+
+
+@app.route('/tambah_kelas',methods=['GET','POST'])
+def tambah_kelas():
+    if request.method=='POST':
+        kode_kelas=request.form['kode_kelas']
+        
+        cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO kelas (kode_kelas) VALUES (%s)',[kode_kelas])
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('kelas'))
+    
+    return render_template('kelas/create.html')
+
+@app.route('/edit_kelas/<int:id>',methods=['GET','POST'])
+def edit_kelas(id):
+    cursor=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM kelas WHERE id_kelas=%s',[id])
+    kelas=cursor.fetchone()
+    if request.method=='POST':
+        kode_kelas=request.form['kode_kelas']
+        cursor.execute('UPDATE kelas SET kode_kelas=%s WHERE id_kelas=%s',[kode_kelas,id])
+        mysql.connection.commit()
+        cursor.close()
+        return redirect(url_for('kelas'))
+    
+    return render_template('kelas/edit.html',data=kelas)
+
 if __name__ == '__main__':
     app.run(debug=True)

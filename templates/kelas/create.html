@@ -1,0 +1,31 @@
+{% extends 'base_admin.html' %} {% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4 text-primary">Tambah Kelas</h3>
+  <div class="row">
+  <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+          <div class="card p-4">
+    <form action="{{url_for('tambah_kelas')}}" method="POST">
+      <div class="mb-3">
+        <label for="nama_pemilihan" class="form-label">Kode Kelas:</label>
+        <input
+          type="text"
+          class="form-control "
+          id="kode_kelas"
+          name="kode_kelas"
+          placeholder="Masukkan kode kelas"
+          required
+        />
+      </div>
+
+<div class="text-end">
+          <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-save me-2"></i> Simpan</button>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+          
+  </div>
+    </div>
+  </div>
+
+  {% endblock %}
