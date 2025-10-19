@@ -1,0 +1,18 @@
+{% extends "base_admin.html" %}
+{% block content %}
+  <div class="container py-5 text-center">
+    <h2 class="fw-bold text-primary mb-5">Hasil Sementara Pemilihan Ketua OSIS</h2>
+    <div class="card p-5 mx-auto" style="max-width: 600px;">
+    {% set colors = ['bg-primary', 'bg-success', 'bg-info', 'bg-warning', 'bg-danger', 'bg-secondary'] %}
+      {% for item in data %}
+      {% set color = colors[(loop.index0) % colors|length] %}
+      <div class="mb-4 text-start">
+        <label class="fw-semibold">{{item.nama}}</label>
+        <div class="progress rounded-pill" style="height: 20px;">
+          <div class="progress-bar {{ color }}" style="width: {{(item.jumlah_voting/total*100)|int}}% ;">{{(item.jumlah_voting/total*100)|int}}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+{% endblock %}

@@ -21,7 +21,7 @@
         <tr>
           <td>{{loop.index}}</td>
           <td>{{item.nama}}</td>
-          <td><img src="{{url_for('static',filename='uploads/'+item.foto)}}" alt="{{item.nama}}" style="width: 6vw; height: 8vh;"></td>
+          <td><img src="{{url_for('static',filename='uploads/'+item.foto)}}" alt="{{item.nama}}" style="width: 4vw; height: 10vh; object-fit: cover; border-radius: 8px;"></td>
           <td>
               <form action="{{url_for('hapus_kandidat',id=item.id_candidate)}}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?');" class="d-inline">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">

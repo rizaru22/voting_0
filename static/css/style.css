@@ -97,3 +97,101 @@ nav.bg-primary .navbar-nav .nav-link {
   color: #ffffff !important;
   opacity: 1 !important;
 }
+
+body {
+    background: #fff;
+    font-family: "Arial", sans-serif;
+    color: #000;
+}
+
+.print-container {
+    width: 100%;
+    padding: 10px 15px;
+}
+
+/* Gunakan Flex agar dua kartu sejajar rapat kiri-kanan */
+.row-print {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* Desain kartu */
+.print-card {
+    flex: 0 0 49%; /* 2 kartu per baris */
+    border: 1px solid #555;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    background: #fdfdfd;
+    box-sizing: border-box;
+    page-break-inside: avoid;
+}
+
+.print-card h5 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+}
+
+.print-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+}
+
+.print-card th {
+    width: 48%;
+    text-align: left;
+    vertical-align: top;
+    padding: 4px 0;
+}
+
+.print-card td {
+    padding: 4px 0;
+}
+
+.print-card td:first-child {
+    width: 4%; /* ✅ kolom tanda ":" */
+    text-align: center;
+}
+
+.print-card td:last-child {
+    width: 48%; /* ✅ kolom isi */
+    white-space: nowrap; /* ✅ cegah teks turun ke bawah */
+    overflow: hidden;
+    text-overflow: ellipsis; /* opsional */
+}
+
+/* Tombol cetak */
+.no-print {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.no-print button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.no-print button:hover {
+    background: #0056b3;
+}
+
+/* Mode print */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin: 0;
+    }
+    @page {
+        margin: 10mm;
+    }
+    .no-print { display: none !important; }
+}

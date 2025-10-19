@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary mb-3">{{pemilihan.nama_pemilihan}}</h2>
+    <p class="text-muted">
+      Selamat datang {{nama_voter}} pada proses pemilihan {{pemilihan.nama_pemilihan}}.
+    </p>
+  </div>
+
+  <div class="row g-5 justify-content-center">
+    {% for item in data %}
+
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <img
+          src="{{ url_for('static', filename='uploads/' + item.foto) }}"
+          alt="Kandidat {{ loop.index }}"
+          class="rounded-4 mb-3 d-block mx-auto"
+          style="
+            width: 150px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+          "
+        />
+
+        <h5 class="fw-semibold">{{item.nama}}</h5>
+        <p class="text-muted small">{{item.visi}}</p>
+        <form action="{{url_for('voted')}}" method="POST" class="d-inline">
+          <input type="hidden" name="id_voting" value="{{id_voting}}">
+          <input type="hidden" name="id_candidate" value="{{item.id_candidate}}">
+          <button class="btn btn-primary rounded-pill mt-2" type="submit">
+            Pilih
+          </button>
+        </form>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
